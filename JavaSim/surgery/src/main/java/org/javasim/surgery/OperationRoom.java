@@ -1,6 +1,7 @@
 package org.javasim.surgery;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.javasim.RestartException;
 import org.javasim.SimulationException;
@@ -41,6 +42,10 @@ public class OperationRoom extends SimulationProcess
 
                 ActiveEnd = currentTime();
                 SurgeryUnit.OperationRoomActiveTime += ActiveEnd - ActiveStart;
+                
+                patient.OperationTime = ActiveEnd - ActiveStart;
+                
+                operationTimes.add(patient.OperationTime);
 
                 boolean emptyRec = false;
                 emptyRec = SurgeryUnit.RecoveryQ.isEmpty();
@@ -74,6 +79,8 @@ public class OperationRoom extends SimulationProcess
         return working;
     }
 
+    public ArrayList<Double> operationTimes = new ArrayList<Double>(); 
+    
     private ExponentialStream STime;
 
     private boolean working;

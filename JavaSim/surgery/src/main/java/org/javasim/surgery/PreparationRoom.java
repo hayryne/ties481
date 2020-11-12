@@ -21,6 +21,7 @@
 package org.javasim.surgery;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.javasim.RestartException;
 import org.javasim.SimulationException;
@@ -59,6 +60,10 @@ public class PreparationRoom extends SimulationProcess
                 ActiveEnd = currentTime();
                 SurgeryUnit.PreparationRoomActiveTime += ActiveEnd - ActiveStart;
                 
+                patient.PreparationTime = ActiveEnd - ActiveStart;
+                
+                preparationTimes.add(patient.PreparationTime);
+                
                 boolean emptyOp = false;
                 emptyOp = SurgeryUnit.OperationQ.isEmpty();
                 
@@ -89,6 +94,8 @@ public class PreparationRoom extends SimulationProcess
     {
         return working;
     }
+    
+    public ArrayList<Double> preparationTimes = new ArrayList<Double>(); 
 
     private ExponentialStream STime;
 

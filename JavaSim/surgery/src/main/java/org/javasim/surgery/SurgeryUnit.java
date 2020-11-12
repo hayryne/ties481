@@ -20,6 +20,8 @@
 
 package org.javasim.surgery;
 
+import java.util.ArrayList;
+
 import org.javasim.RestartException;
 import org.javasim.Scheduler;
 import org.javasim.Simulation;
@@ -72,12 +74,21 @@ public class SurgeryUnit extends SimulationProcess
             System.out.println("Average response time = "
                     + (TotalResponseTime / ProcessedJobs));
             
-            System.out.println("Probability that PreparationRoom is working = "
+            System.out.println("Probability that preparation room is working = "
                             + (PreparationRoomActiveTime / currentTime()));
-            System.out.println("Probability that OperationRoom is working = "
+            System.out.println("Probability that operation room is working = "
                     + (OperationRoomActiveTime / currentTime()));
-            System.out.println("Probability that RecoveryRoom is working = "
+            System.out.println("Probability that recovery room is working = "
                     + (RecoveryRoomActiveTime / currentTime()));
+            
+            System.out.println("Average patient preparation time: "
+            		+ listAvg(SurgeryUnit.Prep.preparationTimes));
+            
+            System.out.println("Average patient preparation time: "
+            		+ listAvg(SurgeryUnit.Op.operationTimes));
+            
+            System.out.println("Average patient preparation time: "
+            		+ listAvg(SurgeryUnit.Rec.recoveryTimes));
 
             Simulation.stop();
 
@@ -100,6 +111,11 @@ public class SurgeryUnit extends SimulationProcess
         this.resumeProcess();
         SimulationProcess.mainSuspend();
     }
+    
+    private static double listAvg(ArrayList<Double> list)
+    {
+    	return list.stream().mapToDouble(a->a).average().getAsDouble();
+    }
 
     public static PreparationRoom Prep;
     public static OperationRoom Op;
@@ -108,7 +124,7 @@ public class SurgeryUnit extends SimulationProcess
     public static Queue PreparationQ = new Queue();
     public static Queue OperationQ = new Queue();
     public static Queue RecoveryQ = new Queue();
-
+    
     public static double TotalResponseTime = 0.0;
 
     public static long TotalJobs = 0;

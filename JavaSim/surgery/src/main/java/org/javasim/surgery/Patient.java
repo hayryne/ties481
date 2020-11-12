@@ -54,4 +54,8 @@ public class Patient
     private double ResponseTime;
 
     private double ArrivalTime;
+    
+    public double PreparationTime = 0.0;
+    public double OperationTime = 0.0;
+    public double RecoveryTime = 0.0;
 }
