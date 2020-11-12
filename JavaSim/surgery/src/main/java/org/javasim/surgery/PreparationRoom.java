@@ -32,9 +32,8 @@ public class PreparationRoom extends SimulationProcess
     public PreparationRoom(double mean)
     {
         STime = new ExponentialStream(mean);
-        operational = true;
         working = false;
-        J = null;
+        patient = null;
     }
 
     public void run ()
@@ -48,32 +47,30 @@ public class PreparationRoom extends SimulationProcess
             while (!SurgeryUnit.PreparationQ.isEmpty())
             {
                 ActiveStart = currentTime();
-                SurgeryUnit.CheckFreq++;
 
-                SurgeryUnit.JobsInQueue += SurgeryUnit.PreparationQ.queueSize();
-                J = SurgeryUnit.PreparationQ.dequeue();
+                patient = SurgeryUnit.PreparationQ.dequeue();
 
                 try
                 {
-                    hold(serviceTime());
+                    hold(STime.getNumber());
                 }
-                catch (SimulationException e)
-                {
-                }
-                catch (RestartException e)
-                {
-                }
+                catch (Exception e) {}
 
                 ActiveEnd = currentTime();
                 SurgeryUnit.PreparationRoomActiveTime += ActiveEnd - ActiveStart;
-                SurgeryUnit.ProcessedJobs++;
-
-                /*
-                 * Introduce this new method because we usually rely upon the
-                 * destructor of the object to do the work in C++.
-                 */
-
-                J.finished();
+                
+                boolean emptyOp = false;
+                emptyOp = SurgeryUnit.OperationQ.isEmpty();
+                
+                SurgeryUnit.OperationQ.enqueue(patient);
+        		
+                try
+                {
+                	if (emptyOp && !SurgeryUnit.Op.processing()) {
+            			SurgeryUnit.Op.activate();
+            		}
+                }
+                catch (Exception e) {}
             }
 
             working = false;
@@ -88,43 +85,14 @@ public class PreparationRoom extends SimulationProcess
         }
     }
 
-    public void broken ()
-    {
-        operational = false;
-    }
-
-    public void fixed ()
-    {
-        operational = true;
-    }
-
-    public boolean isOperational ()
-    {
-        return operational;
-    }
-
     public boolean processing ()
     {
         return working;
     }
 
-    public double serviceTime ()
-    {
-        try
-        {
-            return STime.getNumber();
-        }
-        catch (IOException e)
-        {
-            return 0.0;
-        }
-    }
-
     private ExponentialStream STime;
-
-    private boolean operational;
 
     private boolean working;
 
-    private Job J;
+    private Patient patient;
 }

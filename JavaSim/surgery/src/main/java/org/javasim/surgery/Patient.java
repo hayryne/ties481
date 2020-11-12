@@ -20,37 +20,29 @@
 
 package org.javasim.surgery;
 
-import org.javasim.RestartException;
 import org.javasim.Scheduler;
-import org.javasim.SimulationException;
 
-public class Job
+public class Patient
 {
-    public Job()
+    public Patient()
     {
-        boolean empty = false;
+        boolean emptyPrep = false;
 
         ResponseTime = 0.0;
         ArrivalTime = Scheduler.currentTime();
 
-        empty = SurgeryUnit.PreparationQ.isEmpty();
+        emptyPrep = SurgeryUnit.PreparationQ.isEmpty();
+        
         SurgeryUnit.PreparationQ.enqueue(this);
         SurgeryUnit.TotalJobs++;
-
-        if (empty && !SurgeryUnit.Prep.processing()
-                && SurgeryUnit.Prep.isOperational())
+        
+        try
         {
-            try
-            {
-                SurgeryUnit.Prep.activate();
-            }
-            catch (SimulationException e)
-            {
-            }
-            catch (RestartException e)
-            {
+        	if (emptyPrep && !SurgeryUnit.Prep.processing()) {
+        		SurgeryUnit.Prep.activate();
             }
         }
+        catch (Exception e) {}
     }
 
     public void finished ()
