@@ -30,9 +30,6 @@ public class OperationRoom extends SimulationProcess
                 ActiveStart = currentTime();
 
                 patient = SurgeryUnit.OperationQ.dequeue();
-                
-                // queue client for operation
-                SurgeryUnit.OperationQ.enqueue(patient);
 
                 try
                 {
