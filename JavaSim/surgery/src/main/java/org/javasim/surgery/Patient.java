@@ -33,6 +33,10 @@ public class Patient
 
         emptyPrep = SurgeryUnit.PreparationQ.isEmpty();
         
+        SurgeryUnit.PreparationQLengths.add(
+        		(double)SurgeryUnit.PreparationQ.queueSize()
+		);
+        
         SurgeryUnit.PreparationQ.enqueue(this);
         SurgeryUnit.TotalJobs++;
         

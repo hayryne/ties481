@@ -67,6 +67,10 @@ public class PreparationRoom extends SimulationProcess
                 boolean emptyOp = false;
                 emptyOp = SurgeryUnit.OperationQ.isEmpty();
                 
+                SurgeryUnit.OperationQLengths.add(
+                		(double)SurgeryUnit.OperationQ.queueSize()
+        		);
+                
                 SurgeryUnit.OperationQ.enqueue(patient);
         		
                 try

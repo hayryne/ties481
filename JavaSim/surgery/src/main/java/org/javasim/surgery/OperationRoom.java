@@ -50,6 +50,10 @@ public class OperationRoom extends SimulationProcess
                 boolean emptyRec = false;
                 emptyRec = SurgeryUnit.RecoveryQ.isEmpty();
                 
+                SurgeryUnit.RecoveryQLengths.add(
+                		(double)SurgeryUnit.RecoveryQ.queueSize()
+        		);
+                
                 SurgeryUnit.RecoveryQ.enqueue(patient);
         		
                 try

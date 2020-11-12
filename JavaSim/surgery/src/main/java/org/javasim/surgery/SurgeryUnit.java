@@ -89,6 +89,15 @@ public class SurgeryUnit extends SimulationProcess
             
             System.out.println("Average patient preparation time: "
             		+ listAvg(SurgeryUnit.Rec.recoveryTimes));
+            
+            System.out.println("Average preparation queue length: "
+            		+ listAvg(PreparationQLengths));
+            
+            System.out.println("Average operation queue length: "
+            		+ listAvg(OperationQLengths));
+            
+            System.out.println("Average recovery queue length: "
+            		+ listAvg(RecoveryQLengths));
 
             Simulation.stop();
 
@@ -124,6 +133,10 @@ public class SurgeryUnit extends SimulationProcess
     public static Queue PreparationQ = new Queue();
     public static Queue OperationQ = new Queue();
     public static Queue RecoveryQ = new Queue();
+    
+    public static ArrayList<Double> PreparationQLengths = new ArrayList<Double>();
+    public static ArrayList<Double> OperationQLengths = new ArrayList<Double>();
+    public static ArrayList<Double> RecoveryQLengths = new ArrayList<Double>();
     
     public static double TotalResponseTime = 0.0;
 
