@@ -84,10 +84,10 @@ public class SurgeryUnit extends SimulationProcess
             System.out.println("Average patient preparation time: "
             		+ listAvg(SurgeryUnit.Prep.preparationTimes));
             
-            System.out.println("Average patient preparation time: "
+            System.out.println("Average patient operation time: "
             		+ listAvg(SurgeryUnit.Op.operationTimes));
             
-            System.out.println("Average patient preparation time: "
+            System.out.println("Average patient recovery time: "
             		+ listAvg(SurgeryUnit.Rec.recoveryTimes));
             
             System.out.println("Average preparation queue length: "
