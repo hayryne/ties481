@@ -10,4 +10,4 @@ PROJECT --> PROPERTIES --> JAVA BUILD PATH --> SOURCE --> ADD FOLDER --> JavaSim
 
 The project files are located in surgery/src/main/org/javasim/surgery
 
-The simulation will begin my running Main.Java file as a Java Application.
+The simulation will begin by running Main.Java file as a Java Application.
