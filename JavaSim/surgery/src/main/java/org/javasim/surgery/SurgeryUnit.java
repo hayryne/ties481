@@ -175,8 +175,8 @@ public class SurgeryUnit extends SimulationProcess
 	public static double OperationRoomActiveTime = 0.0;
 	public static double RecoveryRoomActiveTime = 0.0;
 	
-	public static double ComplicationProbability = 0.2;
 	
+	public static double ComplicationProbability = 0.2;
 	public static int Complications = 0;
 	
 	

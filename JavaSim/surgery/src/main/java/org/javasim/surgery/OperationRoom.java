@@ -33,7 +33,7 @@ public class OperationRoom extends SimulationProcess {
 				Double timeMultiplier = 1.0;
 				
 				try {
-					if(complicationRNG.getNumber() < 0.2) {    // 20% chance that the operation has a complication
+					if(complicationRNG.getNumber() < SurgeryUnit.ComplicationProbability) {    // 20% chance that the operation has a complication
 						timeMultiplier = 2.0;
 						SurgeryUnit.Complications++;
 					}
