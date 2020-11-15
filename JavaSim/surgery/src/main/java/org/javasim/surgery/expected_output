@@ -1,16 +1,17 @@
 Output of Main:
 
 Current time 27000.0
-Total number of jobs present 1022
-Total number of jobs processed 1015
-Total response time of 164562.70040841168
-Average response time = 162.1307393186322
-Probability that preparation rooms are working = 0.5037528545623017
-Probability that operation room is working = 0.7528315633521898
-Probability that recovery rooms are working = 0.49566699453190255
-Average patient preparation time: 40.08024625343446
-Average patient operation time: 19.986678673066987
-Average patient recovery time: 39.3378191786396
-Average preparation queue length: 0.28180039138943247
-Average operation queue length: 1.8796477495107633
-Average recovery queue length: 0.16027531956735497
+Total number of jobs present 1059
+Total number of jobs processed 1012
+Total response time of 432958.75206186494
+Average response time = 427.82485381607205
+Probability that preparation rooms are working = 0.5159252955397691
+Probability that operation room is working = 0.8954746957959555
+Probability that recovery rooms are working = 0.5357364238041372
+Average patient preparation time: 39.606472290954905
+Average patient operation time: 23.84400077563195
+Average patient recovery time: 42.89679308628649
+Average preparation queue length: 0.21152030217186024
+Average operation queue length: 13.155450236966825
+Average recovery queue length: 0.23471400394477318
+Number of complications that doubled the operation time: 209
