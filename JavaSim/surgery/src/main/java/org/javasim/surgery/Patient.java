@@ -22,44 +22,44 @@ package org.javasim.surgery;
 
 import org.javasim.Scheduler;
 
-public class Patient
-{
-    public Patient()
-    {
-        boolean emptyPrep = false;
+public class Patient {
+	public Patient() {
+		boolean emptyPrep = false;
 
-        ResponseTime = 0.0;
-        ArrivalTime = Scheduler.currentTime();
+		ResponseTime = 0.0;
+		ArrivalTime = Scheduler.currentTime();
 
-        emptyPrep = SurgeryUnit.PreparationQ.isEmpty();
-        
-        SurgeryUnit.PreparationQLengths.add(
-        		(double)SurgeryUnit.PreparationQ.queueSize()
-		);
-        
-        SurgeryUnit.PreparationQ.enqueue(this);
-        SurgeryUnit.TotalJobs++;
-        
-        try
-        {
-        	if (emptyPrep && !SurgeryUnit.Prep.processing()) {
-        		SurgeryUnit.Prep.activate();
-            }
-        }
-        catch (Exception e) {}
-    }
+		emptyPrep = SurgeryUnit.PreparationQ.isEmpty();
 
-    public void finished ()
-    {
-        ResponseTime = Scheduler.currentTime() - ArrivalTime;
-        SurgeryUnit.TotalResponseTime += ResponseTime;
-    }
+		SurgeryUnit.PreparationQLengths.add((double) SurgeryUnit.PreparationQ.queueSize());
 
-    private double ResponseTime;
+		SurgeryUnit.PreparationQ.enqueue(this);
+		SurgeryUnit.TotalJobs++;
 
-    private double ArrivalTime;
-    
-    public double PreparationTime = 0.0;
-    public double OperationTime = 0.0;
-    public double RecoveryTime = 0.0;
+		try {
+			if (emptyPrep) {
+				for (PreparationRoom Prep : SurgeryUnit.PrepRooms) {
+					if (!Prep.processing()) {
+						Prep.activate();
+					}
+				}
+			}
+
+		} catch (Exception e) {
+		}
+	}
+
+	public void finished() {
+		ResponseTime = Scheduler.currentTime() - ArrivalTime;
+		SurgeryUnit.TotalResponseTime += ResponseTime;
+	}
+
+	private double ResponseTime;
+
+	private double ArrivalTime;
+
+	//Ei käytössä
+	public double PreparationTime = 0.0;
+	public double OperationTime = 0.0;
+	public double RecoveryTime = 0.0;
 }

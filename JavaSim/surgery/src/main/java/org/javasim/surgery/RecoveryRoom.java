@@ -8,74 +8,64 @@ import org.javasim.SimulationException;
 import org.javasim.SimulationProcess;
 import org.javasim.streams.ExponentialStream;
 
-public class RecoveryRoom extends SimulationProcess
-{
-    public RecoveryRoom(double mean)
-    {
-        STime = new ExponentialStream(mean);
-        working = false;
-        patient = null;
-    }
+public class RecoveryRoom extends SimulationProcess {
+	public RecoveryRoom(double mean) {
+		STime = new ExponentialStream(mean);
+		working = false;
+		patient = null;
+	}
 
-    public void run ()
-    {
-        double ActiveStart, ActiveEnd;
+	public void run() {
+		double ActiveStart, ActiveEnd;
 
-        while (!terminated())
-        {
-            working = true;
+		while (!terminated()) {
+			working = true;
 
-            while (!SurgeryUnit.RecoveryQ.isEmpty())
-            {
-                ActiveStart = currentTime();
+			while (!SurgeryUnit.RecoveryQ.isEmpty()) {
+				ActiveStart = currentTime();
 
-                patient = SurgeryUnit.RecoveryQ.dequeue();
+				patient = SurgeryUnit.RecoveryQ.dequeue();
 
-                try
-                {
-                    hold(STime.getNumber());
-                }
-                catch (Exception e) {}
+				try {
+					hold(STime.getNumber());
+				} catch (Exception e) {
+				}
 
-                ActiveEnd = currentTime();
-                SurgeryUnit.RecoveryRoomActiveTime += ActiveEnd - ActiveStart;
-                
-                patient.RecoveryTime = ActiveEnd - ActiveStart;
-                
-                recoveryTimes.add(patient.RecoveryTime);
-                
-                SurgeryUnit.ProcessedJobs++;
+				ActiveEnd = currentTime();
+				SurgeryUnit.RecoveryRoomActiveTime += ActiveEnd - ActiveStart;
 
-                /*
-                 * Introduce this new method because we usually rely upon the
-                 * destructor of the object to do the work in C++.
-                 */
+				patient.RecoveryTime = ActiveEnd - ActiveStart;
 
-                patient.finished();
-            }
+				recoveryTimes.add(patient.RecoveryTime);
 
-            working = false;
+				SurgeryUnit.ProcessedJobs++;
 
-            try
-            {
-                cancel();
-            }
-            catch (RestartException e)
-            {
-            }
-        }
-    }
+				/*
+				 * Introduce this new method because we usually rely upon the destructor of the
+				 * object to do the work in C++.
+				 */
 
-    public boolean processing ()
-    {
-        return working;
-    }
+				patient.finished();
+			}
 
-    public ArrayList<Double> recoveryTimes = new ArrayList<Double>(); 
-    
-    private ExponentialStream STime;
+			working = false;
 
-    private boolean working;
+			try {
+				cancel();
+			} catch (RestartException e) {
+			}
+		}
+	}
 
-    private Patient patient;
+	public boolean processing() {
+		return working;
+	}
+
+	public ArrayList<Double> recoveryTimes = new ArrayList<Double>();
+
+	private ExponentialStream STime;
+
+	private boolean working;
+
+	private Patient patient;
 }

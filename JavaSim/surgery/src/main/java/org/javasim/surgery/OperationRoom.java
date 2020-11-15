@@ -7,84 +7,96 @@ import org.javasim.RestartException;
 import org.javasim.SimulationException;
 import org.javasim.SimulationProcess;
 import org.javasim.streams.ExponentialStream;
+import org.javasim.streams.UniformStream;
 
-public class OperationRoom extends SimulationProcess
-{
-    public OperationRoom(double mean)
-    {
-        STime = new ExponentialStream(mean);
-        working = false;
-        patient = null;
-    }
+public class OperationRoom extends SimulationProcess {
+	public OperationRoom(double mean) {
+		STime = new ExponentialStream(mean);
+		complicationRNG = new UniformStream(0,1);
+		working = false;
+		patient = null;
+	}
 
-    public void run ()
-    {
-        double ActiveStart, ActiveEnd;
+	public void run() {
+		double ActiveStart, ActiveEnd;
 
-        while (!terminated())
-        {
-            working = true;
+		while (!terminated()) {
+			working = true;
 
-            while (!SurgeryUnit.OperationQ.isEmpty())
-            {
-                ActiveStart = currentTime();
+			while (!SurgeryUnit.OperationQ.isEmpty()) {
+				ActiveStart = currentTime();
 
-                patient = SurgeryUnit.OperationQ.dequeue();
+				patient = SurgeryUnit.OperationQ.dequeue();
 
-                try
-                {
-                    hold(STime.getNumber());
-                }
-                catch (Exception e) {}
+				
+				
+				Double timeMultiplier = 1.0;
+				
+				try {
+					if(complicationRNG.getNumber() < 0.2) {    // 20% chance that the operation has a complication
+						timeMultiplier = 2.0;
+						SurgeryUnit.Complications++;
+					}
+				} catch (Exception e) {
+				}
+				
 
-                ActiveEnd = currentTime();
-                SurgeryUnit.OperationRoomActiveTime += ActiveEnd - ActiveStart;
-                
-                patient.OperationTime = ActiveEnd - ActiveStart;
-                
-                operationTimes.add(patient.OperationTime);
+				
+				try {
+					hold(STime.getNumber() * timeMultiplier);
+				} catch (Exception e) {
+				}
 
-                boolean emptyRec = false;
-                emptyRec = SurgeryUnit.RecoveryQ.isEmpty();
-                
-                SurgeryUnit.RecoveryQLengths.add(
-                		(double)SurgeryUnit.RecoveryQ.queueSize()
-        		);
-                
-                SurgeryUnit.RecoveryQ.enqueue(patient);
-        		
-                try
-                {
-                	if (emptyRec && !SurgeryUnit.Rec.processing()) {
-            			SurgeryUnit.Rec.activate();
-            		}
-                }
-                catch (Exception e) {}
-               
-            }
+				ActiveEnd = currentTime();
+				SurgeryUnit.OperationRoomActiveTime += ActiveEnd - ActiveStart;
 
-            working = false;
+				patient.OperationTime = ActiveEnd - ActiveStart;
 
-            try
-            {
-                cancel();
-            }
-            catch (RestartException e)
-            {
-            }
-        }
-    }
+				operationTimes.add(patient.OperationTime);
 
-    public boolean processing ()
-    {
-        return working;
-    }
+				boolean emptyRec = false;
+				emptyRec = SurgeryUnit.RecoveryQ.isEmpty();
 
-    public ArrayList<Double> operationTimes = new ArrayList<Double>(); 
-    
-    private ExponentialStream STime;
+				SurgeryUnit.RecoveryQLengths.add((double) SurgeryUnit.RecoveryQ.queueSize());
 
-    private boolean working;
+				SurgeryUnit.RecoveryQ.enqueue(patient);
 
-    private Patient patient;
+				try {
+					if (emptyRec) {
+						for (RecoveryRoom Rec : SurgeryUnit.RecRooms) {
+							if (!Rec.processing()) {
+								Rec.activate();
+							}
+						}
+					}
+
+				} catch (Exception e) {
+				}
+
+			}
+
+			working = false;
+
+			try {
+				cancel();
+			} catch (RestartException e) {
+			}
+		}
+	}
+
+	public boolean processing() {
+		return working;
+	}
+
+	public ArrayList<Double> operationTimes = new ArrayList<Double>();
+
+	private ExponentialStream STime;
+
+	private boolean working;
+
+	private Patient patient;
+	
+	private UniformStream complicationRNG;
+	
+	
 }

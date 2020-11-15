@@ -22,82 +22,71 @@ package org.javasim.surgery;
 
 import java.util.NoSuchElementException;
 
-public class Queue
-{
-    public Queue()
-    {
-        head = null;
-        length = 0;
-    }
+public class Queue {
+	public Queue() {
+		head = null;
+		length = 0;
+	}
 
-    public boolean isEmpty ()
-    {
-        if (length == 0)
-            return true;
-        else
-            return false;
-    }
+	public boolean isEmpty() {
+		if (length == 0)
+			return true;
+		else
+			return false;
+	}
 
-    public long queueSize ()
-    {
-        return length;
-    }
+	public long queueSize() {
+		return length;
+	}
 
-    public Patient dequeue () throws NoSuchElementException
-    {
-        if (isEmpty())
-            throw new NoSuchElementException();
+	public Patient dequeue() throws NoSuchElementException {
+		if (isEmpty())
+			throw new NoSuchElementException();
 
-        List ptr = head;
-        head = head.next;
+		List ptr = head;
+		head = head.next;
 
-        length--;
+		length--;
 
-        return ptr.work;
-    }
+		return ptr.work;
+	}
 
-    public void enqueue (Patient toadd)
-    {
-        if (toadd == null)
-            return;
+	public void enqueue(Patient toadd) {
+		if (toadd == null)
+			return;
 
-        List ptr = head;
+		List ptr = head;
 
-        if (isEmpty())
-        {
-            head = new List();
-            ptr = head;
-        }
-        else
-        {
-            while (ptr.next != null)
-                ptr = ptr.next;
+		if (isEmpty()) {
+			head = new List();
+			ptr = head;
+		} else {
+			while (ptr.next != null)
+				ptr = ptr.next;
 
-            ptr.next = new List();
-            ptr = ptr.next;
-        }
+			ptr.next = new List();
+			ptr = ptr.next;
+		}
 
-        ptr.next = null;
-        ptr.work = toadd;
-        length++;
-    }
+		ptr.next = null;
+		ptr.work = toadd;
+		length++;
+	}
 
-    private List head;
+	private List head;
 
-    private long length;
+	private long length;
 }
 
 /* This is the queue on which Jobs are placed before they are used. */
 
-class List
-{
-    public List()
-    {
-        work = null;
-        next = null;
-    }
+class List {
+	public List() {
+		work = null;
+		next = null;
+	}
 
-    public Patient work;
+	public Patient work;
 
-    public List next;
+	public List next;
 }
