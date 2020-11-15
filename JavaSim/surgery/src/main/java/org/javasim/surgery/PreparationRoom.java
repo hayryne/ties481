@@ -28,82 +28,69 @@ import org.javasim.SimulationException;
 import org.javasim.SimulationProcess;
 import org.javasim.streams.ExponentialStream;
 
-public class PreparationRoom extends SimulationProcess
-{
-    public PreparationRoom(double mean)
-    {
-        STime = new ExponentialStream(mean);
-        working = false;
-        patient = null;
-    }
+public class PreparationRoom extends SimulationProcess {
+	public PreparationRoom(double mean) {
+		STime = new ExponentialStream(mean);
+		working = false;
+		patient = null;
+	}
 
-    public void run ()
-    {
-        double ActiveStart, ActiveEnd;
+	public void run() {
+		double ActiveStart, ActiveEnd;
 
-        while (!terminated())
-        {
-            working = true;
+		while (!terminated()) {
+			working = true;
 
-            while (!SurgeryUnit.PreparationQ.isEmpty())
-            {
-                ActiveStart = currentTime();
+			while (!SurgeryUnit.PreparationQ.isEmpty()) {
+				ActiveStart = currentTime();
 
-                patient = SurgeryUnit.PreparationQ.dequeue();
+				patient = SurgeryUnit.PreparationQ.dequeue();
 
-                try
-                {
-                    hold(STime.getNumber());
-                }
-                catch (Exception e) {}
+				try {
+					hold(STime.getNumber());
+				} catch (Exception e) {
+				}
 
-                ActiveEnd = currentTime();
-                SurgeryUnit.PreparationRoomActiveTime += ActiveEnd - ActiveStart;
-                
-                patient.PreparationTime = ActiveEnd - ActiveStart;
-                
-                preparationTimes.add(patient.PreparationTime);
-                
-                boolean emptyOp = false;
-                emptyOp = SurgeryUnit.OperationQ.isEmpty();
-                
-                SurgeryUnit.OperationQLengths.add(
-                		(double)SurgeryUnit.OperationQ.queueSize()
-        		);
-                
-                SurgeryUnit.OperationQ.enqueue(patient);
-        		
-                try
-                {
-                	if (emptyOp && !SurgeryUnit.Op.processing()) {
-            			SurgeryUnit.Op.activate();
-            		}
-                }
-                catch (Exception e) {}
-            }
+				ActiveEnd = currentTime();
+				SurgeryUnit.PreparationRoomActiveTime += ActiveEnd - ActiveStart;
 
-            working = false;
+				patient.PreparationTime = ActiveEnd - ActiveStart;
 
-            try
-            {
-                cancel();
-            }
-            catch (RestartException e)
-            {
-            }
-        }
-    }
+				preparationTimes.add(patient.PreparationTime);
 
-    public boolean processing ()
-    {
-        return working;
-    }
-    
-    public ArrayList<Double> preparationTimes = new ArrayList<Double>(); 
+				boolean emptyOp = false;
+				emptyOp = SurgeryUnit.OperationQ.isEmpty();
 
-    private ExponentialStream STime;
+				SurgeryUnit.OperationQLengths.add((double) SurgeryUnit.OperationQ.queueSize());
 
-    private boolean working;
+				SurgeryUnit.OperationQ.enqueue(patient);
 
-    private Patient patient;
+				try {
+					if (emptyOp && !SurgeryUnit.Op.processing()) {
+						SurgeryUnit.Op.activate();
+					}
+				} catch (Exception e) {
+				}
+			}
+
+			working = false;
+
+			try {
+				cancel();
+			} catch (RestartException e) {
+			}
+		}
+	}
+
+	public boolean processing() {
+		return working;
+	}
+
+	public ArrayList<Double> preparationTimes = new ArrayList<Double>();
+
+	private ExponentialStream STime;
+
+	private boolean working;
+
+	private Patient patient;
 }

@@ -20,14 +20,12 @@
 
 package org.javasim.surgery;
 
-public class Main
-{
-    public static void main (String[] args)
-    {
-        SurgeryUnit m = new SurgeryUnit();
+public class Main {
+	public static void main(String[] args) {
+		SurgeryUnit m = new SurgeryUnit();
 
-        m.await();
+		m.await();
 
-        System.exit(0);
-    }
+		System.exit(0);
+	}
 }

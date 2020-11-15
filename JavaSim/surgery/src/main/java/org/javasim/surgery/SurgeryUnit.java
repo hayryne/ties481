@@ -37,6 +37,8 @@ public class SurgeryUnit extends SimulationProcess
 	private static final int PREPARATION_TIME = 40;
 	private static final int OPERATION_TIME = 20;
 	private static final int RECOVERY_TIME = 40;
+	private static final int P = 3; //number of preparation rooms
+	private static final int R = 3; //number of recovery rooms
 	
     public SurgeryUnit()
     {
@@ -53,9 +55,17 @@ public class SurgeryUnit extends SimulationProcess
         try
         {
             Arrivals A = new Arrivals(INTERARRIVAL_TIME);
-            SurgeryUnit.Prep = new PreparationRoom(PREPARATION_TIME);
+            
+            for (int i = 0; i < P; i++) {
+				SurgeryUnit.PrepRooms.add(new PreparationRoom(PREPARATION_TIME));
+			}
+       
             SurgeryUnit.Op = new OperationRoom(OPERATION_TIME);
-            SurgeryUnit.Rec = new RecoveryRoom(RECOVERY_TIME);
+            
+            for (int i = 0; i < R; i++) {
+				RecRooms.add(new RecoveryRoom(RECOVERY_TIME));
+			}
+           
             
             Patient J = new Patient();
 
@@ -81,14 +91,25 @@ public class SurgeryUnit extends SimulationProcess
             System.out.println("Probability that recovery room is working = "
                     + (RecoveryRoomActiveTime / currentTime()));
             
-            System.out.println("Average patient preparation time: "
-            		+ listAvg(SurgeryUnit.Prep.preparationTimes));
             
+            double avgPrep = 0;
+            for(PreparationRoom Prep : PrepRooms) {
+            	avgPrep += listAvg(Prep.preparationTimes);
+            }
+            avgPrep = avgPrep/P;
             System.out.println("Average patient preparation time: "
+            		+ avgPrep);
+            
+            System.out.println("Average patient operation time: "
             		+ listAvg(SurgeryUnit.Op.operationTimes));
             
-            System.out.println("Average patient preparation time: "
-            		+ listAvg(SurgeryUnit.Rec.recoveryTimes));
+            double avgRec = 0;
+            		for(RecoveryRoom Rec : RecRooms) {
+            			avgRec += listAvg(Rec.recoveryTimes);
+            		}
+    		avgRec = avgRec/R;
+            System.out.println("Average patient recovery time: "
+            		+ avgRec);
             
             System.out.println("Average preparation queue length: "
             		+ listAvg(PreparationQLengths));
@@ -102,7 +123,10 @@ public class SurgeryUnit extends SimulationProcess
             Simulation.stop();
 
             A.terminate();
-            SurgeryUnit.Prep.terminate();
+            
+            for (PreparationRoom Prep : SurgeryUnit.PrepRooms) {
+            	Prep.terminate();
+            }
             SurgeryUnit.Op.terminate();
 
             SimulationProcess.mainResume();
@@ -126,9 +150,9 @@ public class SurgeryUnit extends SimulationProcess
     	return list.stream().mapToDouble(a->a).average().getAsDouble();
     }
 
-    public static PreparationRoom Prep;
+    public static ArrayList<PreparationRoom> PrepRooms = new ArrayList<PreparationRoom>();
     public static OperationRoom Op;
-    public static RecoveryRoom Rec;
+    public static ArrayList<RecoveryRoom> RecRooms = new ArrayList<RecoveryRoom>();
     
     public static Queue PreparationQ = new Queue();
     public static Queue OperationQ = new Queue();
@@ -145,6 +169,10 @@ public class SurgeryUnit extends SimulationProcess
     public static long ProcessedJobs = 0;
 
     public static double PreparationRoomActiveTime = 0.0;
-    public static double OperationRoomActiveTime = 0.0;
-    public static double RecoveryRoomActiveTime = 0.0;
+	public static double OperationRoomActiveTime = 0.0;
+	public static double RecoveryRoomActiveTime = 0.0;
+	
+	public static double ComplicationProbability = 0.2;
+	
+	
 }
