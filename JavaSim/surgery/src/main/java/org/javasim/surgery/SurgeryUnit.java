@@ -39,6 +39,7 @@ public class SurgeryUnit extends SimulationProcess
 	private static final int RECOVERY_TIME = 40;
 	private static final int P = 3; //number of preparation rooms
 	private static final int R = 3; //number of recovery rooms
+	private static final int NUMBER_OF_PATIENTS = 1000; 
 	
     public SurgeryUnit()
     {
@@ -54,7 +55,7 @@ public class SurgeryUnit extends SimulationProcess
     {
         try
         {
-            Arrivals A = new Arrivals(INTERARRIVAL_TIME);
+            Arrivals A = new Arrivals(INTERARRIVAL_TIME, NUMBER_OF_PATIENTS);
             
             for (int i = 0; i < P; i++) {
 				SurgeryUnit.PrepRooms.add(new PreparationRoom(PREPARATION_TIME));
@@ -65,9 +66,6 @@ public class SurgeryUnit extends SimulationProcess
             for (int i = 0; i < R; i++) {
 				RecRooms.add(new RecoveryRoom(RECOVERY_TIME));
 			}
-           
-            
-            Patient J = new Patient();
 
             A.activate();
 

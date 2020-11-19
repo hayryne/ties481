@@ -28,8 +28,10 @@ import org.javasim.SimulationProcess;
 import org.javasim.streams.ExponentialStream;
 
 public class Arrivals extends SimulationProcess {
-	public Arrivals(double mean) {
+	public Arrivals(double mean, int limit) {
 		InterArrivalTime = new ExponentialStream(mean);
+		
+		this.limit = limit;
 	}
 
 	public void run() {
@@ -40,6 +42,11 @@ public class Arrivals extends SimulationProcess {
 			} catch (RestartException e) {
 			} catch (IOException e) {
 			}
+			
+			if (++count > limit) {
+				this.terminate();
+				return;
+			}
 
 			new Patient();
 		}
@@ -47,5 +54,8 @@ public class Arrivals extends SimulationProcess {
 
 	private ExponentialStream InterArrivalTime;
 	
+	private int count = 0;
+	
+	private int limit;
 
 }
