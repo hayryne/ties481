@@ -44,7 +44,7 @@ public class Main {
 		}
 		
 		System.out.println();
-		System.out.println("Simulation over. " + n + " rounds were completed.");
+		System.out.println("Simulation over. " + n + " Rounds were completed.");
 
 		double mean = MyMath.Mean(blockedTime);
 		double confidence = 0.95;
@@ -53,7 +53,7 @@ public class Main {
 		double upper = mean + CI;
 		System.out.println("The mean time for the opreation room being blocked in this setup is: "
 				+ String.format("%.4f", mean));
-		System.out.println("The "+ confidence +" confidense interval for this is " + String.format("%.4f", lower) + " - " + String.format("%.4f", upper));
+		System.out.println("The "+ confidence +" confidence interval for this is " + String.format("%.4f", lower) + " - " + String.format("%.4f", upper));
 
 		System.exit(0);
 	}

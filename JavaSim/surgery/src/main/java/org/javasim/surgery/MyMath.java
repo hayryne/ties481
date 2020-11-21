@@ -13,7 +13,7 @@ public class MyMath {
 	public static double ConfidenceInterval(Double[] numbers, double confidenceLevel) {
 
 		// if the value doesn't make sense just use 95% confidence level
-		if (confidenceLevel > 1 && confidenceLevel < 0)
+		if (confidenceLevel > 1 || confidenceLevel < 0)
 			confidenceLevel = 0.95; 
 
 		SummaryStatistics stats = new SummaryStatistics();
