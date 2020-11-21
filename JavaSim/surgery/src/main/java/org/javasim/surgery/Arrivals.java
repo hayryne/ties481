@@ -20,41 +20,32 @@
 
 package org.javasim.surgery;
 
-import java.io.IOException;
-
-import org.javasim.RestartException;
-import org.javasim.SimulationException;
 import org.javasim.SimulationProcess;
-import org.javasim.streams.ExponentialStream;
 
-public class Arrivals extends SimulationProcess
-{
-    public Arrivals(double mean)
-    {
-        InterArrivalTime = new ExponentialStream(mean);
-    }
+public class Arrivals extends SimulationProcess {
+	public Arrivals(int limit) {
+		this.limit = limit;
+	}
 
-    public void run ()
-    {
-        while (!terminated())
-        {
-            try
-            {
-                hold(InterArrivalTime.getNumber());
-            }
-            catch (SimulationException e)
-            {
-            }
-            catch (RestartException e)
-            {
-            }
-            catch (IOException e)
-            {
-            }
+	public void run() {
+		while (!terminated()) {
+			try {
+				hold(SurgeryUnit.InterArrivalTime.getNumber());
+			} catch (Exception e) { e.printStackTrace();}
+			
+			if (++count > limit) {
+				this.terminate();
 
-            new Patient();
-        }
-    }
+				return;
+			}
 
-    private ExponentialStream InterArrivalTime;
+			new Patient();
+			SurgeryUnit.TotalJobs++;
+		}
+	}
+	
+	private int count = 0;
+	
+	private int limit;
+
 }

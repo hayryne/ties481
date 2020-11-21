@@ -20,14 +20,41 @@
 
 package org.javasim.surgery;
 
-public class Main
-{
-    public static void main (String[] args)
-    {
-        SurgeryUnit m = new SurgeryUnit();
+import java.lang.Thread.State;
+import java.util.Arrays;
 
-        m.await();
+import org.javasim.Simulation;
+import org.javasim.SimulationException;
 
-        System.exit(0);
-    }
+public class Main {
+	public static void main(String[] args) throws SimulationException {
+
+		int n = 20; // simulation rounds
+
+		Double[] blockedTime = new Double[n];
+
+		for (int i = 0; i < n; i++) {
+			SurgeryUnit m = new SurgeryUnit(0.2); // Probability higher than 0 results in patient complications being
+													// turned on
+			m.await();
+			blockedTime[i] = (m.OperationRoomBlocking / m.TotalJobs);
+			Simulation.reset(); // Scheduler needs to be reset for the next simulation
+			
+			System.out.println("---");
+		}
+		
+		System.out.println();
+		System.out.println("Simulation over. " + n + " rounds were completed.");
+
+		double mean = MyMath.Mean(blockedTime);
+		double confidence = 0.95;
+		double CI = MyMath.ConfidenceInterval(blockedTime, confidence);
+		double lower = mean - CI;
+		double upper = mean + CI;
+		System.out.println("The mean time for the opreation room being blocked in this setup is: "
+				+ String.format("%.4f", mean));
+		System.out.println("The "+ confidence +" confidense interval for this is " + String.format("%.4f", lower) + " - " + String.format("%.4f", upper));
+
+		System.exit(0);
+	}
 }

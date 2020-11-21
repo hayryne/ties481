@@ -1,19 +1,17 @@
 Output of Main:
 
-Total number of jobs present 1080
-Total number of jobs processed 1079
-Total response time of 8999.39
-Average response time = 8.3405
-Probability that machine is working = 0.999933
-Probability that machine has failed = 0
-Average number of jobs present = 1
-
-Output of Main -breaks:
-
-Total number of jobs present 1190
-Total number of jobs processed 1034
-Total response time of 704303
-Average response time = 681.144
-Probability that machine is working = 0.865654
-Probability that machine has failed = 0.133096
-Average number of jobs present = 80.8097
+Current time 27000.0
+Total number of jobs present 1059
+Total number of jobs processed 1012
+Total response time of 432958.75206186494
+Average response time = 427.82485381607205
+Probability that preparation rooms are working = 0.5159252955397691
+Probability that operation room is working = 0.8954746957959555
+Probability that recovery rooms are working = 0.5357364238041372
+Average patient preparation time: 39.606472290954905
+Average patient operation time: 23.84400077563195
+Average patient recovery time: 42.89679308628649
+Average preparation queue length: 0.21152030217186024
+Average operation queue length: 13.155450236966825
+Average recovery queue length: 0.23471400394477318
+Number of complications that doubled the operation time: 209
