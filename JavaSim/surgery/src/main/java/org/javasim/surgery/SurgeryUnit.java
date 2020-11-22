@@ -46,7 +46,7 @@ public class SurgeryUnit extends SimulationProcess
 	// constants for numbers of services are defined here
 	private static final int PREPARATION_ROOMS = 3;
 	private static final int OPERATION_ROOMS = 1;
-	private static final int RECOVERY_ROOMS = 5;
+	private static final int RECOVERY_ROOMS = 4;
 	
 	private final int NUMBER_OF_PATIENTS = 1000;
 	
