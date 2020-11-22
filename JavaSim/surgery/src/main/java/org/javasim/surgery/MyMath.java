@@ -30,7 +30,43 @@ public class MyMath {
 
 		return confidenceInterval;
 	}
+	
+	public static double ConfidenceIntervalBasic(Double[] numbers, double critVal) {
+		double confidenceInterval = critVal * (StandardDeviation(numbers) / Math.sqrt(numbers.length));
+		return confidenceInterval;
+	}
+	
+	/* Use t-test to check if the difference between 2 samples is statistically significant */
+    public static double PairwiseComparison(Double[] numbers1, Double[] numbers2) {
+    	if (numbers1.length != numbers2.length) {
+    		throw new IllegalArgumentException("Lists must be the same length");
+    	}
+    	
+    	int n = numbers1.length;
+    	double sumOfDifferences = 0;
+    	Double[] sums = new Double[n];
+    	for (int i = 0; i < n; i++) {
+    		sums[i] = numbers1[i]-numbers2[i];
+    		sumOfDifferences += sums[i];
+    	}
+    	double meanOfDifferences = sumOfDifferences/n;
+    	double stddevOfDifferences = MyMath.StandardDeviation(sums);
+    	double tValue = meanOfDifferences/(stddevOfDifferences/Math.sqrt(n));
+    	return tValue;
+    }
 
+	public static double StandardDeviation(Double[] numbers) {
+		double mean = Mean(numbers);
+		double sumOfSquareDiffs = 0;
+		
+		for (double num : numbers) {
+			sumOfSquareDiffs += Math.pow(num - mean, 2);
+		}
+		double meanOfSquareDiffs = sumOfSquareDiffs / (numbers.length - 1);
+		double standardDeviation = Math.sqrt(meanOfSquareDiffs);
+		
+		return standardDeviation;
+	}
 	
 	public static double Sum(Double[] numbers) {
 		double sum = 0;

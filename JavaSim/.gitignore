@@ -9,3 +9,5 @@ target
 *.out
 *~*
 /bin/
+**/last_block_results.txt
+**/last_queue_results.txt

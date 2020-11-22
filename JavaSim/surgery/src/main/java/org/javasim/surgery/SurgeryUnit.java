@@ -20,6 +20,8 @@
 
 package org.javasim.surgery;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.javasim.Semaphore;
@@ -30,6 +32,10 @@ import org.javasim.streams.UniformStream;
 
 public class SurgeryUnit extends SimulationProcess
 {
+	// file names used to store old simulation results
+	public static final String BLOCK_RESULTS_FILE = "last_block_results.txt";
+	public static final String QUEUE_RESULTS_FILE = "last_queue_results.txt";
+	
 	// static constants for simulation process times are defined here
 	// these are used to create ExponentialStreams with the constant as the mean value
 	private static final int INTERARRIVAL_TIME = 25;
@@ -40,7 +46,7 @@ public class SurgeryUnit extends SimulationProcess
 	// constants for numbers of services are defined here
 	private static final int PREPARATION_ROOMS = 3;
 	private static final int OPERATION_ROOMS = 1;
-	private static final int RECOVERY_ROOMS = 3;
+	private static final int RECOVERY_ROOMS = 5;
 	
 	private final int NUMBER_OF_PATIENTS = 1000;
 	
@@ -85,6 +91,13 @@ public class SurgeryUnit extends SimulationProcess
             while (SurgeryUnit.ProcessedJobs < 1000)
             	hold(1000);
             
+            AverageQueueLength = listAvg(PreparationQLengths);
+            OperationRoomBlockingProbability = OperationRoomBlocking / TotalJobs;
+            OperationRoomUtilization = OperationRoomActiveTime / currentTime() / OPERATION_ROOMS;
+            
+            saveSimulationResult(AverageQueueLength, QUEUE_RESULTS_FILE);
+            saveSimulationResult(OperationRoomBlockingProbability, BLOCK_RESULTS_FILE);
+            
             System.out.println("Total number of jobs initiated: " + TotalJobs);
 	        System.out.println("Total number of jobs processed: " + ProcessedJobs);
 	        
@@ -92,15 +105,15 @@ public class SurgeryUnit extends SimulationProcess
 	        System.out.println("Average response time: " + TotalResponseTime / ProcessedJobs);
 
 	        System.out.println("Preparation room utilization: " + PreparationRoomActiveTime / currentTime() / PREPARATION_ROOMS);
-	        System.out.println("Operation room utilization: " + OperationRoomActiveTime / currentTime() / OPERATION_ROOMS);
+	        System.out.println("Operation room utilization: " + OperationRoomUtilization);
 	        System.out.println("Recovery room utilization: " + RecoveryRoomActiveTime / currentTime() / RECOVERY_ROOMS);
 	        
-	        System.out.println("Average preparation queue length: " + listAvg(PreparationQLengths));
+	        System.out.println("Average preparation queue length: " + AverageQueueLength);
 
-	        System.out.println("Probability that operation room is blocking: " + OperationRoomBlocking / TotalJobs);
+	        System.out.println("Probability that operation room is blocking: " + OperationRoomBlockingProbability);
 	        
 	        if (COMPLICATION_PROBABILITY > 0) System.out.println("Number of complications that doubled the operation time: " + Complications);
-	        else System.out.println("Complications were not turned of for the simulation");
+	        else System.out.println("Complications were not turned on for the simulation");
 
             Simulation.stop();
             SimulationProcess.mainResume();
@@ -117,8 +130,17 @@ public class SurgeryUnit extends SimulationProcess
     {
     	return list.stream().mapToDouble(a->a).average().getAsDouble();
     }
-        
-
+    
+    // Write a simulation result (number) to file for later use
+	private static void saveSimulationResult(double number, String fileName) {
+		try {
+		      FileWriter fw = new FileWriter(fileName, true);
+		      fw.write(String.valueOf(number) + "\n");
+		      fw.close();
+		    } catch (IOException e) {
+		      e.printStackTrace();
+		    }
+	}
     
     public static ExponentialStream InterArrivalTime;
     public static ExponentialStream PreparationTime;
@@ -137,6 +159,10 @@ public class SurgeryUnit extends SimulationProcess
 	public static double RecoveryRoomActiveTime = 0.0;
 	
 	public static double OperationRoomBlocking = 0;
+
+	public static double AverageQueueLength = 0;
+	public static double OperationRoomBlockingProbability = 0;
+	public static double OperationRoomUtilization = 0;
 	
     public static ArrayList<Double> PreparationQLengths = new ArrayList<Double>();
     public static ArrayList<Double> OperationQLengths = new ArrayList<Double>();
