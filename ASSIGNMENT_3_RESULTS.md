@@ -1,5 +1,11 @@
 # Assignment 3 - Simulation Results
 
+NOTE!:
+------
+
+Because of a bug in the code that was noticed after these simulation runs,
+the results here are not representative of the real simulation.
+
 Basic results
 --------------
 
