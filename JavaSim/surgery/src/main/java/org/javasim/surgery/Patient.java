@@ -47,13 +47,15 @@ public class Patient extends SimulationEntity {
 			SurgeryUnit.PreparationSemaphore.get(this);
 			hold(this.PreparationTime);
 			SurgeryUnit.PreparationRoomActiveTime += this.PreparationTime;
-			SurgeryUnit.PreparationSemaphore.release();
 			
 			SurgeryUnit.OperationQLengths.add((double)SurgeryUnit.OperationSemaphore.numberWaiting());
 			SurgeryUnit.OperationSemaphore.get(this);
+			
+			// preparation room is released once the patient actually leaves it
+			SurgeryUnit.PreparationSemaphore.release();
+			
 			hold(this.OperationTime);
 			SurgeryUnit.OperationRoomActiveTime += this.OperationTime;
-			SurgeryUnit.OperationSemaphore.release();
 			
 			long recoveryQueue = SurgeryUnit.RecoverySemaphore.numberWaiting();
 			SurgeryUnit.RecoveryQLengths.add((double)recoveryQueue);
@@ -61,6 +63,10 @@ public class Patient extends SimulationEntity {
 			if (recoveryQueue > 0) SurgeryUnit.OperationRoomBlocking++;
 			
 			SurgeryUnit.RecoverySemaphore.get(this);
+			
+			// operation room is released once the patient actually leaves it
+			SurgeryUnit.OperationSemaphore.release();
+			
 			hold(this.RecoveryTime);
 			SurgeryUnit.RecoveryRoomActiveTime += this.RecoveryTime;
 			SurgeryUnit.RecoverySemaphore.release();
