@@ -35,6 +35,8 @@ public class Main {
 
 		int n = 20; // simulation rounds
 		double critVal = 2.093; // critical value for calculating confidence interval
+		
+		int patients = 1000;
 
 		Double[] blockedTimes = new Double[n];
 		Double[] queueLengths = new Double[n];
@@ -44,7 +46,7 @@ public class Main {
 		Double[] lastQueueLengths = readLastResults(SurgeryUnit.QUEUE_RESULTS_FILE);
 
 		for (int i = 0; i < n; i++) {
-			SurgeryUnit m = new SurgeryUnit(0); // Probability higher than 0 results in patient complications being
+			SurgeryUnit m = new SurgeryUnit(0, patients); // Probability higher than 0 results in patient complications being
 													// turned on
 			m.await();
 			blockedTimes[i] = m.OperationRoomBlockingProbability;
@@ -52,6 +54,8 @@ public class Main {
 			operationUtilizations[i] = m.OperationRoomUtilization;
 			
 			Simulation.reset(); // Scheduler needs to be reset for the next simulation
+			
+			patients += 1000;
 			
 			System.out.println("---");
 		}

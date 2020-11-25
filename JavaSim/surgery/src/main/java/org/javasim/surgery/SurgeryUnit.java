@@ -48,17 +48,19 @@ public class SurgeryUnit extends SimulationProcess
 	private static final int OPERATION_ROOMS = 1;
 	private static final int RECOVERY_ROOMS = 4;
 		
-	public static final int NUMBER_OF_PATIENTS = 1000;	
-	public static final int NUMBER_OF_PARTITIONS = 10;
+	public static int NUMBER_OF_PATIENTS;	
+	public static int NUMBER_OF_PARTITIONS = 10;
 	
 	public static double COMPLICATION_PROBABILITY = 0;
 	
-    public SurgeryUnit(double complication_probability)
+    public SurgeryUnit(double complication_probability, int patients)
     {
-    	InterArrivalTime = new ExponentialStream(INTERARRIVAL_TIME);
-    	PreparationTime = new ExponentialStream(PREPARATION_TIME);
+    	NUMBER_OF_PATIENTS = patients;
+    	
+    	InterArrivalTime = new UniformStream(INTERARRIVAL_TIME - 5, INTERARRIVAL_TIME + 5);
+    	PreparationTime = new UniformStream(PREPARATION_TIME - 10, PREPARATION_TIME + 10);
     	OperationTime = new ExponentialStream(OPERATION_TIME);
-    	RecoveryTime = new ExponentialStream(RECOVERY_TIME);
+    	RecoveryTime = new UniformStream(RECOVERY_TIME - 10, RECOVERY_TIME + 10);
     	
     	complicationRNG = new UniformStream(0,1);
     	
@@ -162,10 +164,10 @@ public class SurgeryUnit extends SimulationProcess
 		    }
 	}
     
-    public static ExponentialStream InterArrivalTime;
-    public static ExponentialStream PreparationTime;
+    public static UniformStream InterArrivalTime;
+    public static UniformStream PreparationTime;
     public static ExponentialStream OperationTime;
-    public static ExponentialStream RecoveryTime;
+    public static UniformStream RecoveryTime;
     
     public static UniformStream complicationRNG;
     
