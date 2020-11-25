@@ -65,6 +65,11 @@ public class SurgeryUnit extends SimulationProcess
     	PreparationSemaphore = new Semaphore(PREPARATION_ROOMS);
     	OperationSemaphore = new Semaphore(OPERATION_ROOMS);
     	RecoverySemaphore = new Semaphore(RECOVERY_ROOMS);
+    	
+    	PreparationQLengths = new ArrayList<Double>();
+    	OperationQLengths = new ArrayList<Double>();
+    	RecoveryQLengths = new ArrayList<Double>();
+    	
     	Complications = 0;
     	OperationRoomBlocking = 0;
     	
