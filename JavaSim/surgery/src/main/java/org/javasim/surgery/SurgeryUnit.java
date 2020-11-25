@@ -93,7 +93,7 @@ public class SurgeryUnit extends SimulationProcess
 
             Simulation.start();
 
-            while (SurgeryUnit.ProcessedJobs < 1000)
+            while (SurgeryUnit.ProcessedJobs < NUMBER_OF_PATIENTS)
             	hold(1000);
             
             AverageQueueLength = listAvg(PreparationQLengths);
