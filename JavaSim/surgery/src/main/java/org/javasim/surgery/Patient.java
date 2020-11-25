@@ -24,11 +24,13 @@ import org.javasim.Scheduler;
 import org.javasim.SimulationEntity;
 
 public class Patient extends SimulationEntity {
-	public Patient() {
+	public Patient(int number) {
 		try {
 			this.PreparationTime = SurgeryUnit.PreparationTime.getNumber();
 			
 			this.OperationTime = SurgeryUnit.OperationTime.getNumber();
+			
+			PatientNumber = number;
 			
 			if(SurgeryUnit.complicationRNG.getNumber() < SurgeryUnit.COMPLICATION_PROBABILITY) {
 				this.OperationTime *= 2.0;
@@ -43,7 +45,16 @@ public class Patient extends SimulationEntity {
 	
 	public void run() {
 		try {
-			SurgeryUnit.PreparationQLengths.add((double)SurgeryUnit.PreparationSemaphore.numberWaiting());
+			
+			double queueLength = (double)SurgeryUnit.PreparationSemaphore.numberWaiting();
+			SurgeryUnit.PreparationQLengths.add(queueLength);
+			
+			// this is the zero-based index of the partition the current patient belongs in
+			// e.g. with a sample of 1000 patients divided in 10 partitions, patient 255 would be in partition number 3
+			int partition = (int)((PatientNumber - 1) / ((SurgeryUnit.NUMBER_OF_PATIENTS / SurgeryUnit.NUMBER_OF_PARTITIONS)));
+			
+			SurgeryUnit.partitionQLengths.get(partition).add(queueLength);
+
 			SurgeryUnit.PreparationSemaphore.get(this);
 			hold(this.PreparationTime);
 			SurgeryUnit.PreparationRoomActiveTime += this.PreparationTime;
@@ -83,6 +94,8 @@ public class Patient extends SimulationEntity {
 	private double ResponseTime;
 
 	private double ArrivalTime;
+	
+	private int PatientNumber;
 
 	public double PreparationTime = 0.0;
 	public double OperationTime = 0.0;

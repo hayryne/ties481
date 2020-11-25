@@ -47,9 +47,9 @@ public class SurgeryUnit extends SimulationProcess
 	private static final int PREPARATION_ROOMS = 3;
 	private static final int OPERATION_ROOMS = 1;
 	private static final int RECOVERY_ROOMS = 4;
-	
-	private final int NUMBER_OF_PATIENTS = 1000;
-	
+		
+	public static final int NUMBER_OF_PATIENTS = 1000;	
+	public static final int NUMBER_OF_PARTITIONS = 10;
 	
 	public static double COMPLICATION_PROBABILITY = 0;
 	
@@ -69,6 +69,12 @@ public class SurgeryUnit extends SimulationProcess
     	PreparationQLengths = new ArrayList<Double>();
     	OperationQLengths = new ArrayList<Double>();
     	RecoveryQLengths = new ArrayList<Double>();
+    	
+    	partitionQLengths = new ArrayList<ArrayList<Double>>(NUMBER_OF_PARTITIONS);
+    	
+    	for (int i = 0; i < NUMBER_OF_PARTITIONS; i++) {
+    		partitionQLengths.add(new ArrayList<Double>());
+    	}
     	
     	Complications = 0;
     	OperationRoomBlocking = 0;
@@ -120,6 +126,15 @@ public class SurgeryUnit extends SimulationProcess
 	        if (COMPLICATION_PROBABILITY > 0) System.out.println("Number of complications that doubled the operation time: " + Complications);
 	        else System.out.println("Complications were not turned on for the simulation");
 
+	        
+	        ArrayList<Double> lengths = new ArrayList<Double>();
+	        
+	        for (int i = 0; i < partitionQLengths.size(); i++) {
+	        	lengths.add(listAvg(partitionQLengths.get(i)));
+	        }
+	        
+	        averagePartitionQLengths.add(lengths);
+	        
             Simulation.stop();
             SimulationProcess.mainResume();
         } catch (Exception e) {}
@@ -172,6 +187,9 @@ public class SurgeryUnit extends SimulationProcess
     public static ArrayList<Double> PreparationQLengths = new ArrayList<Double>();
     public static ArrayList<Double> OperationQLengths = new ArrayList<Double>();
     public static ArrayList<Double> RecoveryQLengths = new ArrayList<Double>();
+    
+    public static ArrayList<ArrayList<Double>> partitionQLengths;
+    public static ArrayList<ArrayList<Double>> averagePartitionQLengths = new ArrayList<ArrayList<Double>>();
 	
 	public static Semaphore PreparationSemaphore = new Semaphore(PREPARATION_ROOMS);
 	public static Semaphore OperationSemaphore = new Semaphore(OPERATION_ROOMS);

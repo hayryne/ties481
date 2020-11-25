@@ -39,7 +39,7 @@ public class Arrivals extends SimulationProcess {
 				return;
 			}
 
-			new Patient();
+			new Patient(count);
 			SurgeryUnit.TotalJobs++;
 		}
 	}

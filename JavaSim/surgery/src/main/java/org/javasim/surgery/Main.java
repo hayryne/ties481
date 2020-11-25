@@ -97,6 +97,25 @@ public class Main {
 			double tValueQueueLengths = MyMath.PairwiseComparison(queueLengths, lastQueueLengths);
 			System.out.println("T-test value for difference between this run's and last run's queue length: " + tValueQueueLengths);
 		}
+		
+		System.out.print("Round ");
+		
+		for (int i = 0; i < SurgeryUnit.NUMBER_OF_PARTITIONS; i++) {
+			System.out.print(String.format("| part %02d ", i + 1));
+		}
+		
+		System.out.println();
+		
+		for (int i = 0; i < SurgeryUnit.averagePartitionQLengths.size(); i++) {
+			ArrayList<Double> partition = SurgeryUnit.averagePartitionQLengths.get(i);
+			
+			System.out.print(String.format("   %02d ", i + 1));
+			
+			for (int j = 0; j < partition.size(); j++) {
+				System.out.print(String.format("| %05.2f   ", partition.get(j)));
+			}
+			System.out.println();
+		}
 
 		System.exit(0);
 	}
