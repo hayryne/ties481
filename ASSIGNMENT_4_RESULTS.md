@@ -103,10 +103,13 @@ Some different configurations for validation of model:
 | 0 1 0 1 0 1        | 2,3199       | 2,208              |
 | 1 1 0 0 0 1        | 0,5012       | 0,773              |
 
+Here we can see larger differences between model expectation and actual value from simulation
 
 Conclusions
 ------------
 
-There are quite big differences in queue length and model expectation in validation
+Queue length seems to depend mostly on distribution of patient arrival times and preparation room
+capacity. 
+However there are quite big differences in queue length and model expectation in validation
 configurations so model is not very accurate. 
 Joint effects would have to be taken into consideration for a better model. 
