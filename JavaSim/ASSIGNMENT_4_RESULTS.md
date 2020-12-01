@@ -29,14 +29,14 @@ Other possibilility of the parameter is 1.
 
 x1 |x2 |x3 |x4=x1*x2|x5=x1*x3|x6=x2*x3|
 ---|---|---|--------|--------|--------|
-1  |1  |1  |	1   |     1  |     1  |
-1  |1  |0  |	1   |     0  |     0  |
-1  |0  |1  |	0   |     1  |     0  |
-0  |1  |1  |	0   |     0  |     1  |
-0  |0  |1  |	1   |     0  |     0  |
-0  |1  |0  |	0   |     1  |     0  |
-1  |0  |0  |	0   |     0  |     1  |
-0  |0  |0  |	1   |     1  |     1  |
+\+  |+  |+  |	+   |     +  |     +  |
+\+  |+  |-  |	+   |     -  |     -  |
+\+  |-  |+  |	-   |     +  |     -  |
+\-  |+  |+  |	-   |     -  |     +  |
+\-  |-  |+  |	+   |     -  |     -  |
+\-  |+  |-  |	-   |     +  |     -  |
+\+  |-  |-  |	-   |     -  |     +  |
+\-  |-  |-  |	+   |     +  |     +  |
 
 So 8 different configurations chosen were:
 
@@ -76,7 +76,7 @@ Regression model
 
 Regression model calculated from results with R:
 
-Y = 2.61 - 1.916\*x1 + 0.114\*x2 + 0.037\*x3 - 0.481\*x4 - 0.114\*x5 -0.035\*x6
+Queue length = 2.61 - 1.916\*x1 + 0.114\*x2 + 0.037\*x3 - 0.481\*x4 - 0.114\*x5 -0.035\*x6
 
 
 Result analysis
@@ -112,4 +112,4 @@ Queue length seems to depend mostly on distribution of patient arrival times and
 capacity. 
 However there are quite big differences in queue length and model expectation in validation
 configurations so model is not very accurate. 
-Joint effects would have to be taken into consideration for a better model. 
+Joint effects would have to be taken into consideration for a better model.
